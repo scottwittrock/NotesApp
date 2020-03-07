@@ -1,12 +1,15 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const notes = [];
+let db = require("./db/db.json");
+// console.log(db);
+let notes = db;
+console.log(notes);
 
 // Sets up the Express App
 // =============================================================
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -16,49 +19,39 @@ app.use(express.static('public'));
 // Routes
 // =============================================================
 
-// Basic route that sends the user first to the AJAX Page
+//REturns notes.html
 app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
-app.get("/", function (req, res) {
+//Default page if notes.html not found
+app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-//Displays all notes
-app.get("/api/notes", function (req, res) {
-    return res.json(notes);
-});
-
-// Displays a single note, or returns false
-app.get("/api/notes/:note", function (req, res) {
-    const chosen = req.params.note;
-
-    console.log(chosen);
-
-    for (const i = 0; i < notes.length; i++) {
-        if (chosen === notes[i].routeName) {
-            return res.json(notes[i]);
-        }
-    }
-
-    return res.json(false);
-});
-
-// Create New Notes - takes in JSON input
-
+//Retrieves all notes stored in db.json
 app.post("/api/notes", function (req, res) {
-    const newNote = req.body;
-
-    console.log(newNote);
-
-    notes.push(newNote);
-
-    res.json(newNote);
+    return res.sendFile(path.join(__dirname, "db/db.json"));
 });
+
+//Creates new notes, adds to db.json, returns new note to client
+app.get("/api/notes", function (req, res) {
+    const newNote = req.body;
+    console.log("This is newNote: " + newNote);
+    db.push(newNote);
+    console.log("=================");
+    console.log("This is db after newnote pushed: " + db);
+    res.json(newNote);
+
+
+    return res.sendFile(path.join(__dirname, "db/db.json"));
+});
+
 
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
-});
+})
+
+
