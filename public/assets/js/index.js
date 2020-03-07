@@ -55,7 +55,6 @@ var renderActiveNote = function () {
 // Get the note data from the inputs, save it to the db and update the view
 var handleNoteSave = function () {
   var newNote = {
-    id: "",
     title: $noteTitle.val(),
     text: $noteText.val()
   };
@@ -63,14 +62,13 @@ var handleNoteSave = function () {
   saveNote(newNote).then(function (data) {
     getAndRenderNotes();
     renderActiveNote();
-    let savedNote = JSON.stringify(data);
-    console.log("this is savedNote: " + savedNote);
   });
 };
 
 // Delete the clicked note
 var handleNoteDelete = function (event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
+  console.log("btn clicked");
   event.stopPropagation();
 
   var note = $(this)
@@ -84,6 +82,7 @@ var handleNoteDelete = function (event) {
   deleteNote(note.id).then(function () {
     getAndRenderNotes();
     renderActiveNote();
+    console.log("8888888888888888888888");
   });
 };
 

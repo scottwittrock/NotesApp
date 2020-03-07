@@ -1,8 +1,8 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-let db = require("./db/db.json");
-// console.log(db);
+const db = require("./db/db.json");
+let id_num = 0;
 var notes = db;
 console.log(notes);
 
@@ -27,7 +27,7 @@ app.get("/notes", function (req, res) {
 
 //Display all notes
 app.get("/api/notes", function (req, res) {
-    res.json(notes);;
+    res.json(notes);
 });
 
 //Retrieves and stores? all notes stored in db.json
@@ -40,12 +40,11 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-
 //Creates new notes, adds to db.json, returns new note to client
 app.post("/api/notes", function (req, res) {
     const newNote = req.body;
     console.log("This is newNote: " + newNote);
-    newNote.id = newNote.id++;
+    newNote.id = id_num++;
     console.log(newNote);
     notes.push(newNote);
     fs.writeFile(path.join(__dirname, "db/db.json"), JSON.stringify(notes), function (err) {
@@ -70,7 +69,6 @@ app.delete("/api/notes/:id", function (req, res) {
         return res.json(false);
     });
 });
-
 
 // Starts the server to begin listening
 // =============================================================
