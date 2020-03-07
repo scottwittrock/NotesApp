@@ -24,30 +24,37 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
+
+//Display all notes
+app.get("/api/notes", function (req, res) {
+    res.json(notes);;
+});
+
+//Retrieves and stores? all notes stored in db.json
+app.get("/api/notes", function (req, res) {
+    return res.sendFile(path.join(__dirname, "db/db.json"));
+});
+
 //Default page if notes.html not found
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-//Retrieves all notes stored in db.json
-app.post("/api/notes", function (req, res) {
-    return res.sendFile(path.join(__dirname, "db/db.json"));
-});
 
 //Creates new notes, adds to db.json, returns new note to client
-app.get("/api/notes", function (req, res) {
+app.post("/api/notes", function (req, res) {
     const newNote = req.body;
     console.log("This is newNote: " + newNote);
-    db.push(newNote);
-    console.log("=================");
-    console.log("This is db after newnote pushed: " + db);
+    // Using a RegEx Pattern to remove spaces from newNote
+    // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
+    newNote.routeName = newNote.name;
+    console.log(newNote);
+    notes.push(newNote);
+    fs.writeFile(path.join(__dirname, "db/db.json"), JSON.stringify(notes), function (err) {
+        if (err) throw err;
+    })
     res.json(newNote);
-
-
-    return res.sendFile(path.join(__dirname, "db/db.json"));
 });
-
-
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function () {
