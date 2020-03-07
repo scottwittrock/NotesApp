@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 let db = require("./db/db.json");
 // console.log(db);
-let notes = db;
+var notes = db;
 console.log(notes);
 
 // Sets up the Express App
@@ -45,9 +45,7 @@ app.get("*", function (req, res) {
 app.post("/api/notes", function (req, res) {
     const newNote = req.body;
     console.log("This is newNote: " + newNote);
-    // Using a RegEx Pattern to remove spaces from newNote
-    // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-    newNote.routeName = newNote.name;
+    newNote.id = newNote.id++;
     console.log(newNote);
     notes.push(newNote);
     fs.writeFile(path.join(__dirname, "db/db.json"), JSON.stringify(notes), function (err) {
@@ -55,6 +53,25 @@ app.post("/api/notes", function (req, res) {
     })
     res.json(newNote);
 });
+
+//Deletes specific notes
+app.delete("/api/notes/:id", function (req, res) {
+    const chosenNote = req.params.id;
+    console.log("this is chosenNote : " + chosenNote);
+    for (let i = 0; i < notes.length; i++) {
+        if (chosenNote === notes[i].id) {
+            notes.splice(i, 1);
+            console.log("this is notes: " + notes);
+        }
+    }
+    fs.writeFile(path.join(__dirname, "db/db.json"), JSON.stringify(notes), function (err) {
+        if (err) throw err;
+        console.log(notes);
+        return res.json(false);
+    });
+});
+
+
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function () {

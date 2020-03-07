@@ -1,10 +1,9 @@
-// let id = require("uuid");///added uuid variable below**********************************
 var $noteTitle = $(".note-title");
 var $noteText = $(".note-textarea");
 var $saveNoteBtn = $(".save-note");
 var $newNoteBtn = $(".new-note");
 var $noteList = $(".list-container .list-group");
-let newID = 0;
+
 
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
@@ -56,7 +55,7 @@ var renderActiveNote = function () {
 // Get the note data from the inputs, save it to the db and update the view
 var handleNoteSave = function () {
   var newNote = {
-    id: newID++,
+    id: "",
     title: $noteTitle.val(),
     text: $noteText.val()
   };
@@ -64,6 +63,8 @@ var handleNoteSave = function () {
   saveNote(newNote).then(function (data) {
     getAndRenderNotes();
     renderActiveNote();
+    let savedNote = JSON.stringify(data);
+    console.log("this is savedNote: " + savedNote);
   });
 };
 
