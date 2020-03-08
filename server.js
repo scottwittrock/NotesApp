@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const db = require("./db/db.json");
-let id_num = 0;
+let id_num = 1;
 var notes = db;
 console.log(notes);
 
@@ -43,9 +43,7 @@ app.get("*", function (req, res) {
 //Creates new notes, adds to db.json, returns new note to client
 app.post("/api/notes", function (req, res) {
     const newNote = req.body;
-    console.log("This is newNote: " + newNote);
     newNote.id = id_num++;
-    console.log(newNote);
     notes.push(newNote);
     fs.writeFile(path.join(__dirname, "db/db.json"), JSON.stringify(notes), function (err) {
         if (err) throw err;
@@ -60,12 +58,10 @@ app.delete("/api/notes/:id", function (req, res) {
     for (let i = 0; i < notes.length; i++) {
         if (chosenNote == notes[i].id) {
             notes.splice(i, 1);
-            console.log("this is notes: " + notes);
         }
     }
     fs.writeFile(path.join(__dirname, "db/db.json"), JSON.stringify(notes), function (err) {
         if (err) throw err;
-        console.log(notes);
         return res.json(false);
     });
 });
