@@ -55,10 +55,10 @@ app.post("/api/notes", function (req, res) {
 
 //Deletes specific notes
 app.delete("/api/notes/:id", function (req, res) {
-    const chosenNote = req.params.id;
+    const chosenNote = parseInt(req.params.id);
     console.log("this is chosenNote : " + chosenNote);
     for (let i = 0; i < notes.length; i++) {
-        if (chosenNote === notes[i].id) {
+        if (chosenNote == notes[i].id) {
             notes.splice(i, 1);
             console.log("this is notes: " + notes);
         }
