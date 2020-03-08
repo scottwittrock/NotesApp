@@ -36,4 +36,4 @@
 
 ## <img src = "https://avatars3.githubusercontent.com/u/57377678?v=4" alt = "user profile picture" width = "150"/>
 
-### Feel free to contact Katia Gibson at katiacreator.github.io.
+### Feel free to contact Katia Gibson at http://katiacreator.github.io.
